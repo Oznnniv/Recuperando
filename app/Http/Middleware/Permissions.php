@@ -4,7 +4,7 @@ namespace App\Http\Middleware;
 
 use Closure;
 
-class CheckRole
+class Permissions
 {
     /**
      * Handle an incoming request.
@@ -13,12 +13,14 @@ class CheckRole
      * @param  \Closure  $next
      * @return mixed
      */
-    public function handle($request, Closure $next)
+    public function handle($request, Closure $next, $rol)
     {
-        if (\Auth::user()) {
+        if (\Auth::user()->rol == $rol) {
+            return $next($request);
+        }else{
             //abort(403, "Acceso no autorizado");
             return redirect('/home');
         }
-        return $next($request);
+
     }
 }

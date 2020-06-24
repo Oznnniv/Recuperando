@@ -67,7 +67,6 @@ class ContentController extends Controller
     {
         $content = new Content();
         $content->fill($request->except('image1', 'image2', 'image3', 'user_id', 'updated_at'));
-        $this->authorize('store', $content); //POLÍTICA
         $content->user_id = Auth::user()->id;
         $content->updated_at = NULL;
         if($request->hasFile('image1')){
@@ -172,7 +171,6 @@ class ContentController extends Controller
     {
         $content = Content::find($id);
         $content->fill($request->all());
-        $this->authorize('store', $content);
         if ($content->status == 'FALSE') {
             $reasons = new Message();
             $reasons->fill($request->all()); //Se necesita para saber el mensaje que se ha escrito en la vista details del difusor
@@ -186,7 +184,7 @@ class ContentController extends Controller
     {
         $content = Content::find($id);
         $content->fill($request->all());
-        $this->authorize('store', $content);
+
         if ($content->status == 'FALSE') {
             $reasons = new Message();
             $reasons->fill($request->all()); //Se necesita para saber el mensaje que se ha escrito en la vista details del difusor
@@ -214,49 +212,4 @@ class ContentController extends Controller
     {
         //
     }
-    /*
-    function activate(){
-        if (!\Session::has('activo')) return redirect("/cont-all")->with('warning','Seleccione el grupo activo o vuelva a intentar');
-        $activo = \Session::get('activo');
-        $activo->refresh();
-        return view('diffuser.create', compact("activo"));
-    }
-
-    function add(Request $request, $ide){
-        try {
-            if (!\Session::has('activo')){
-                return response()->json([], 401);
-            }
-            $activo = \Session::get('activo');
-            $section = new Section();
-            $section->id = $activo->id;
-            $section->user_id = $ide;
-            $section->save();
-            $a = $section->toArray();
-            $a["name"] = $section->name;
-            return response()->json($a, 200) ;
-        }catch (\Illuminate\Database\QueryException $e){
-            return response()->json(["error"=>"Error ". $e->getMessage()], 409) ;
-        }catch (\Exception $e){
-            return response()->json(["Otro error"], 500) ;
-        }
-    }
-
-    function delete(Request $request, $mid){
-        try {
-            if (!\Session::has('activo')){
-                return response()->json([],401) ;
-            }
-            $activo = \Session::get('activo');
-            $section = new Section::find($mid);
-            if($section   != null ){
-                $a = $section->toArray();
-                $section->delete();
-                return response()->json($a,200) ;
-            }return response()->json([],404) ;
-
-        }catch (\Illuminate\Database\QueryException $e){
-            return response()->json(["error"=>"Error ". $e->getMessage()],409) ;
-        }
-    }*/
 }

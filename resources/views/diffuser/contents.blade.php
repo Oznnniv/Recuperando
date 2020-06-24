@@ -38,8 +38,10 @@
                             @forelse($users as $user)
                                 @if($user->id == $section->user_id)
                                 {{ $user->name }}
+                                @else
                                 @endif
                             @empty
+                                No existen autores
                             @endforelse
                         </div>
                     @endif
